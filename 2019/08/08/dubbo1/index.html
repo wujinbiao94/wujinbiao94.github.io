@@ -3,27 +3,32 @@
 
 <head><meta name="generator" content="Hexo 3.9.0">
   
-  <title>彪哥的博客</title>
+  <title>dubbo使用解读（1）-- 集群容错模式 - 彪哥的博客</title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
   
 
   <link rel="shortcut icon" href="/favicon.ico" type="image/png">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="彪哥的博客">
-<meta property="og:url" content="http://yoursite.com/index.html">
+  <meta name="description" content="dubbo使用解读（1）– 集群容错模式">
+<meta name="keywords" content="dubbo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="dubbo使用解读（1）-- 集群容错模式">
+<meta property="og:url" content="http://yoursite.com/2019/08/08/dubbo1/index.html">
 <meta property="og:site_name" content="彪哥的博客">
+<meta property="og:description" content="dubbo使用解读（1）– 集群容错模式">
 <meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-08-08T10:10:30.868Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="彪哥的博客">
+<meta name="twitter:title" content="dubbo使用解读（1）-- 集群容错模式">
+<meta name="twitter:description" content="dubbo使用解读（1）– 集群容错模式">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdui@0.4.3/dist/css/mdui.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.15.8/styles/atom-one-dark.css">
    
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
   
   <link rel="stylesheet" href="//at.alicdn.com/t/font_1038733_0xvrvpg9c0r.css">
-  <link rel="stylesheet" href="/css/style.css?v=1565259042974">
+  <link rel="stylesheet" href="/css/style.css?v=1565259042957">
 </head>
 
 <body class="mdui-drawer-body-left">
@@ -148,61 +153,55 @@
               <i class="mdui-icon material-icons">menu</i>
             </a>
           </div>
-        <section class="nexmoe-posts" id="brand-waterfall">
-    
-    <div class="nexmoe-post">
-        <a href="/2019/08/08/dubbo1/">
-            <div class="nexmoe-post-cover mdui-ripple"> 
-                
-                    <img src="https://i.loli.net/2019/01/13/5c3aec85a4343.jpg">
-                
-                <h1>dubbo使用解读（1）-- 集群容错模式</h1>
-            </div>
-        </a>
-        <div class="nexmoe-post-meta">
-            <a><i class="nexmoefont icon-calendar-fill"></i>2019年08月08日</a>
-            <a><i class="nexmoefont icon-areachart"></i>286 字</a>
-            <a><i class="nexmoefont icon-time-circle-fill"></i>大概 1 分钟</a>
-            
-            
-                <a class="nexmoefont icon-tag-fill -link" href="/tags/dubbo/">dubbo</a>
-            
-        </div>
-        <article>
-            
-            <h1 id="dubbo使用解读（1）–-集群容错模式"><a href="#dubbo使用解读（1）–-集群容错模式" class="headerlink" title="dubbo使用解读（1）– 集群容错模式"></a>dubbo使用解读（1）– 集群容错模式</h1>
-            
-        </article>
+        <div class="nexmoe-post">
+    <div class="nexmoe-post-cover"> 
+        
+            <img src="https://i.loli.net/2019/01/13/5c3aec85a4343.jpg">
+        
+        <h1>dubbo使用解读（1）-- 集群容错模式</h1>
     </div>
+  <div class="nexmoe-post-meta">
+    <a><i class="nexmoefont icon-calendar-fill"></i>2019年08月08日</a>
+    <a><i class="nexmoefont icon-areachart"></i>286 字</a>
+    <a><i class="nexmoefont icon-time-circle-fill"></i>大概 1 分钟</a>
     
-    <div class="nexmoe-post">
-        <a href="/2019/08/01/开始/">
-            <div class="nexmoe-post-cover mdui-ripple"> 
-                
-                    <img src="https://i.loli.net/2019/01/13/5c3aec85a4343.jpg">
-                
-                <h1>开始</h1>
-            </div>
-        </a>
-        <div class="nexmoe-post-meta">
-            <a><i class="nexmoefont icon-calendar-fill"></i>2019年08月01日</a>
-            <a><i class="nexmoefont icon-areachart"></i>4 字</a>
-            <a><i class="nexmoefont icon-time-circle-fill"></i>大概 1 分钟</a>
-            
-            
-                <a class="nexmoefont icon-tag-fill -link" href="/tags/博客/">博客</a>
-            
-        </div>
-        <article>
-            
-            <p>新的开始！！！</p>
+    
+      <a class="nexmoefont icon-tag-fill -link" href="/tags/dubbo/">dubbo</a>
+    
+  </div>
+  <article>
+    <h1 id="dubbo使用解读（1）–-集群容错模式"><a href="#dubbo使用解读（1）–-集群容错模式" class="headerlink" title="dubbo使用解读（1）– 集群容错模式"></a>dubbo使用解读（1）– 集群容错模式</h1><a id="more"></a>
 
-            
-        </article>
-    </div>
-    
+<h5 id="1-Failover-Cluster"><a href="#1-Failover-Cluster" class="headerlink" title="1. Failover Cluster"></a>1. Failover Cluster</h5><p>失败自动重试，可设置重试次数<br><code>&lt;dubbo:service retries=&quot;2&quot; /&gt;</code><br>配置单个方法的</p>
+<pre><code>&lt;dubbo:reference&gt;
+    &lt;dubbo:method name=&quot;findFoo&quot; retries=&quot;2&quot; /&gt;
+&lt;/dubbo:reference&gt;</code></pre><h5 id="2-Failfast-Cluster"><a href="#2-Failfast-Cluster" class="headerlink" title="2. Failfast Cluster"></a>2. Failfast Cluster</h5><p>快速失败，只发起一次调用，失败立即报错。通常用于非幂等性的写操作，比如新增记录。</p>
+<h4 id="3-Failsafe-Cluster"><a href="#3-Failsafe-Cluster" class="headerlink" title="3. Failsafe Cluster"></a>3. Failsafe Cluster</h4><p>失败安全，出现异常时，直接忽略。通常用于写入审计日志等操作。</p>
+<h4 id="4-Failback-Cluster"><a href="#4-Failback-Cluster" class="headerlink" title="4. Failback Cluster"></a>4. Failback Cluster</h4><p>失败自动恢复，后台记录失败请求，定时重发。通常用于消息通知操作。</p>
+<h4 id="5-Forking-Cluster"><a href="#5-Forking-Cluster" class="headerlink" title="5.Forking Cluster"></a>5.Forking Cluster</h4><p>并行调用多个服务器，只要一个成功即返回。通常用于实时性要求较高的读操作，但需要浪费更多服务资源。可通过 forks=”2” 来设置最大并行数。</p>
+<h4 id="6-Broadcast-Cluster"><a href="#6-Broadcast-Cluster" class="headerlink" title="6.Broadcast Cluster"></a>6.Broadcast Cluster</h4><p>广播调用所有提供者，逐个调用，任意一台报错则报错。通常用于通知所有提供者更新缓存或日志等本地资源信息。</p>
+<blockquote>
+<p>原文：<a href="http://dubbo.apache.org/zh-cn/docs/user/demos/fault-tolerent-strategy.html" target="_blank" rel="noopener">http://dubbo.apache.org/zh-cn/docs/user/demos/fault-tolerent-strategy.html</a></p>
+</blockquote>
+
+  </article>
+  <section class="nexmoe-comment">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1.5.0/dist/gitalk.min.css">
+<div id="gitalk"></div>
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1.5.0/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: '80b2453b6d5f37ad6225',
+        clientSecret: '43e99fa852795c9a7b3eb924b2558c64b84bbdeb',
+        id: window.location.pathname,
+        repo: 'nexmoe.github.io',
+        owner: 'nexmoe',
+        admin: 'nexmoe'
+    })
+    gitalk.render('gitalk')
+</script>
 </section>
-
+</div>
     </div>
   </div>
   <script src="https://cdn.jsdelivr.net/npm/mdui@0.4.3/dist/js/mdui.min.js"></script>
